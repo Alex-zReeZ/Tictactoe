@@ -1,54 +1,36 @@
-package fr.isae.morpion.model;
+import java.util.Arrays; // Manipulating arrays
+import java.util.InputMismatchException; // If it's not expected type
+import java.util.Scanner; // To read input data
 
-public class Morpion {
-    public final static int NEUTRE = 0;
-    public final static int CROIX = 1;
-    public final static int ROND = 2;
 
-    private int[][] cases;
-    private int joueur;
-    private int numbers_try;
+public class Main {
+    static String[] board;
+    static String turn;
 
-    public Morpion() {
-        cases = new int[3][3];
-        joueur = CROIX;
-    }
-
-    public void reset() {               //try again function
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                cases[i][j] = NEUTRE;
-            }
+    static void playing_Board() {
+        System.out.println("|---|---|---|");
+        for (int i = 0; i < 9; i+= 3) {
+            System.out.println("| " + board[i] + " | " + board[i + 1] + " | " + board[i + 2] + " |");
+            System.out.println("|---|---|---|");
         }
-        joueur = CROIX;
-        numbers_try = 0;
     }
 
-    public boolean setCase(int i, int j) {
-        if (i >= 0 && i < 3 && j >= 0 && j < 3 && cases[i][j] == NEUTRE) {
-            cases[i][j] = joueur;
-            numbers_try++;
+    static String check_Winner() {
 
-            if (gagne(i, j)) {
-                return true;
-            }
-            joueur = (joueur == CROIX ? ROND : CROIX);
+        String[] win_combination = {"123", "147", "159", "258", "357",  "369", "456", "789"};   //winning possibilities
+
+        for (String line : win_combination) {
+            String sequence = "" + board[line.charAt(0) - '1'] + board[line.charAt(1) - '1'] + board[line.charAt(2) - '1'];
+
+            if (sequence.equals("XXX")) return "X";
+            if (sequence.equals("OOO")) return "O";
         }
-        return false;
+
+        if (Arrays.stream(board).allMatch(s -> s.equals("X") || s.equals("O"))) return "draw";
+
+        return null;
     }
 
-    private boolean gagne(int i, int j) {
-        return ((cases[i][0] == cases[i][1] && cases[i][1] == cases[i][2]) ||
-                (cases[0][j] == cases[1][j] && cases[1][j] == cases[2][j]) ||
-                (i == j && cases[0][0] == cases[1][1] && cases[1][1] == cases[2][2]) ||
-                (i + j == 2 && cases[0][2] == cases[1][1] && cases[1][1] == cases[2][0]));
     }
 
-    public int getJoueur() {
-        return joueur;
-    }
-
-    public int getNumbers_try() {
-        return numbers_try;
-    }
 }
