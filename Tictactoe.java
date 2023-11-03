@@ -55,7 +55,7 @@ public class Main {
             try {
                 numInput = in.nextInt();
 
-                if (numInput < 1 || numInput > 9) { // check for wrong input
+                if (numInput < 1 || numInput > 9 || !board[numInput - 1].equals(" ")) { // check for wrong input
                     System.out.println("Invalid input; retry.");
                     continue;
                 }
